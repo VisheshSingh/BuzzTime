@@ -1,10 +1,17 @@
 <button (click)="showForm = !showForm" class="btn btn-primary mb-3">Add Business</button>
 <div class="card card-body mb-3" *ngIf="showForm">
   <h2>Add Business</h2>
-  <form (submit)="onSubmit($event)">
+  <form #Bform="ngForm" (ngSubmit)="onSubmit(Bform)">
     <div class="form-group">
       <label>Business Name:</label>
-      <input type="text" class="form-control" name="name" [(ngModel)]="work.name">
+      <input type="text" [ngClass]="{'is-invalid': businessName.errors && businessName.touched}" class="form-control"
+        name="name" [(ngModel)]="work.name" #businessName="ngModel" required minlength="2">
+      <div class="invalid-feedback" [hidden]="!businessName.errors?.required">
+        Business Name is required
+      </div>
+      <div class="invalid-feedback" [hidden]="!businessName.errors?.minlength">
+        Must be at least 2 characters
+      </div>
     </div>
     <div class="form-group">
       <label>Business URL:</label>
@@ -12,13 +19,24 @@
     </div>
     <div class="form-group">
       <label>Phone Number:</label>
-      <input type="text" class="form-control" name="phone" [(ngModel)]="work.phone">
+      <input type="text" [ngClass]="{'is-invalid': businessPhone.errors && businessPhone.touched}" class="form-control"
+        name="phone" [(ngModel)]="work.phone" #businessPhone="ngModel" required pattern="\d{3}-\d{3}-\d{4}">
+      <div class="invalid-feedback" [hidden]="!businessPhone.errors?.required">
+        Phone Number is required
+      </div>
+      <div class="invalid-feedback" [hidden]="!businessPhone.errors?.pattern">
+        Must be a valid number (e.g. XXX-XXX-XXXX)
+      </div>
     </div>
     <div class="form-group">
       <label>Business Hours:</label>
-      <input type="text" class="form-control" name="hours" [(ngModel)]="work.hours">
+      <input type="text" [ngClass]="{'is-invalid': businessHours.errors && businessHours.touched}" class="form-control"
+        name="hours" [(ngModel)]="work.hours" #businessHours="ngModel" required>
+      <div class="invalid-feedback">
+        Business Hours is required
+      </div>
     </div>
-    <button (click)="addBusiness()" [disabled]="work.name == '' || work.url == '' || work.phone == ''" class="btn btn-block btn-primary mt-3 mb-3">Add
+    <button (click)="addBusiness()" [disabled]="!Bform.form.valid" class="btn btn-block btn-primary mt-3 mb-3">Add
       business</button>
   </form>
 </div>
