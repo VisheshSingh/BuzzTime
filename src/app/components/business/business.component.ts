@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { Business } from "../../models/Business";
 
 @Component({
@@ -16,6 +16,8 @@ export class BusinessComponent implements OnInit {
   business: Business[];
   enableAdd: boolean = true;
   showForm: boolean = false;
+  @ViewChild("Bform")
+  form: any;
 
   constructor() {}
 
@@ -42,17 +44,23 @@ export class BusinessComponent implements OnInit {
     ];
   }
 
-  addBusiness() {
-    this.business.unshift(this.work);
-    this.work = {
-      name: "",
-      url: "",
-      phone: "",
-      hours: ""
-    };
-  }
-  onSubmit(e) {
-    console.log(123);
-    e.preventDefault();
+  // Testing if the form adds business
+  // addBusiness() {
+  //   this.business.unshift(this.work);
+  //   this.work = {
+  //     name: "",
+  //     url: "",
+  //     phone: "",
+  //     hours: ""
+  //   };
+  // }
+
+  onSubmit({ value, valid }: { value: Business; valid: Boolean }) {
+    if (!valid) {
+      alert("Form is not valid");
+    } else {
+      this.business.unshift(value);
+      this.form.reset();
+    }
   }
 }
